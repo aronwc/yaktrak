@@ -1,6 +1,7 @@
 import pyak as pk
 import MySQLdb as mdb
 import ConfigParser
+import sys
 
 # use configparser to get database info
 cp = ConfigParser.ConfigParser()
@@ -95,4 +96,5 @@ def main(location_name):
             persist_comment(comment, yak_id)
 
 if __name__ == "__main__":
+    main(sys.argv[1])
     main()
