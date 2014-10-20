@@ -14,6 +14,13 @@ db = cp.get("database", "db")
 # database connection is set as global and used in most functions
 con = mdb.connect(host, user, password, db)
 cursor = con.cursor()
+# mysql unicode chokes when dealing with emoji. a full technical description
+# is beyond my real understanding of text encodings, suffice to say the
+# following line is necessary to make mysql place nice w/ emoji in yaks.
+# it should also be mentioned this limits us to working with mysql 5.5.3+,
+# as that was when the utf8mb4 charset was introduced.
+cursor.execute("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci")
+con.commit()
 
 def get_yaks_for_location(location_name):
     yakker = get_yakker_for_location(location_name)
