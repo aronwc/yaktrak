@@ -45,10 +45,13 @@ def get_yakker_for_location(location_name):
 
 def get_yakker_id_for_location(location_name):
     sql = """SELECT yakker_id FROM yakker_ids yi JOIN locations l
-            ON yi.location_id = location.id  WHERE name = %s"""
+            ON yi.location_id = l.id  WHERE name = %s"""
     cursor.execute(sql, (location_name))
     yakker_id = cursor.fetchone()
-    return yakker_id[0] # because yakker_id is a 1-tuple, index in & return first result
+    if yakker_id:
+        return yakker_id[0] # because yakker_id is a 1-tuple, index in & return first result
+    else:
+        return None
 
 def get_location_id_from_name(location_name):
     sql = "SELECT id FROM locations WHERE name = %s"
@@ -58,25 +61,26 @@ def get_location_id_from_name(location_name):
 def persist_comment(comment, yak_id):
     # first check it doesn't already exist
     sql = "SELECT id FROM comments WHERE message_id = %s"
-    cursor.execute(sql, (comment.message_id))
-    comment_exists = cursor.fetchone()[0]
+    cursor.execute(sql, (comment.comment_id))
+    comment_exists = cursor.fetchone()
     if not comment_exists:
         # and if it doesn't we can store it
         sql = """INSERT INTO comments(message, message_id, time, yak_id)
-                VALUES(%s, %s, %s, %s, %s,)"""
-        cursor.execute(sql, (comment.message, comment.message_id, comment.time, yak_id))
-        conn.commit()
+                VALUES(%s, %s, TIMESTAMP(FROM_UNIXTIME(%s)), %s)"""
+        cursor.execute(sql, (comment.comment, comment.comment_id, comment.time, yak_id))
+        con.commit()
 
 def persist_yak(yak, location_name):
     sql = "SELECT id FROM yaks WHERE message_id = %s"
-    cursor.execute(sql, (yak.mesage_id))
+    cursor.execute(sql, (yak.message_id))
     yak_exists = cursor.fetchone()
 
     if not yak_exists:
         location_id = get_location_id_from_name(location_name)
         sql = """INSERT INTO yaks(message, message_id, time, score, location_id)
-        VALUES(%s, %s, %s, %s, %s"""
+        VALUES(%s, %s, TIMESTAMP(FROM_UNIXTIME(%s)), %s, %s)"""
         cursor.execute(sql, (yak.message, yak.message_id, yak.time, yak.likes, location_id))
+        con.commit()
     else:
         # we've already stored this before, but we can update its number of likes
         # with the most recent number
@@ -104,4 +108,3 @@ def main(location_name):
 
 if __name__ == "__main__":
     main(sys.argv[1])
-    main()
