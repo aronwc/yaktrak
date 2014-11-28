@@ -2,7 +2,7 @@
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `message` longtext,
   `message_id` varchar(64) DEFAULT NULL,
   `time` timestamp NULL DEFAULT NULL,
   `yak_id` int(11) DEFAULT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `yakker_ids` (
 
 CREATE TABLE `yaks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `message` longtext,
   `message_id` varchar(64) DEFAULT NULL,
   `time` timestamp NULL DEFAULT NULL,
   `score` int(11) DEFAULT NULL,
