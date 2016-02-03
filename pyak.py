@@ -11,7 +11,7 @@ import json
 import os
 import requests
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from decimal import Decimal
 from hashlib import sha1, md5
 from random import randrange
@@ -88,7 +88,7 @@ class Comment:
             my_action = "^"
         elif self.liked < 0:
             my_action = "v"
-        print "%s(%s) %s" % (my_action, self.likes, self.comment)
+        print("%s(%s) %s" % (my_action, self.likes, self.comment))
 
 
 class Yak:
@@ -144,9 +144,9 @@ class Yak:
 
     def print_yak(self):
         if self.handle is not None:
-            print "%s:" % self.handle
-        print self.message
-        print "%s likes, %s comments. posted %s at %s %s" % (self.likes, self.comments, self.time, self.latitude, self.longitude)
+            print("%s:" % self.handle)
+        print(self.message)
+        print("%s likes, %s comments. posted %s at %s %s" % (self.likes, self.comments, self.time, self.latitude, self.longitude))
 
 
 class Yakker:
@@ -185,14 +185,14 @@ class Yakker:
 
     def sign_request(self, page, params):
 
-        key = "EF64523D2BD1FA21F18F5BC654DFC41B"
+        key = "EF64523D2BD1FA21F18F5BC654DFC41B".encode('utf-8')
 
         # The salt is just the current time in seconds since epoch
         salt = str(int(time.time()))
 
         # The message to be signed is essentially the request, with parameters sorted
         msg = "/api/" + page
-        sorted_params = params.keys()
+        sorted_params = list(params.keys())
         sorted_params.sort()
         if len(params) > 0:
             msg += "?"
@@ -207,7 +207,7 @@ class Yakker:
         msg += salt
 
         # Calculate the signature
-        h = hmac.new(key, msg, sha1)
+        h = hmac.new(key, msg.encode('utf-8'), sha1)
         hash = base64.b64encode(h.digest())
 
         return hash, salt, msg
@@ -248,7 +248,7 @@ class Yakker:
             "Cookie": self.cookie
         }
         data = ""
-        sorted_params = params.keys()
+        sorted_params = list(params.keys())
         sorted_params.sort()
         for param in sorted_params:
             data += "%s=%s&" % (param, params[param])
