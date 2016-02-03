@@ -32,7 +32,6 @@ def get_yaks_for_location(location_name):
 
 def get_yakker_for_location(location_name):
     sql = """SELECT latitude, longitude FROM locations WHERE name = %s"""
-    print('location_name=', location_name)
     cursor.execute(sql, (location_name,))
     latitude, longitude = cursor.fetchone()
     # if we've already created an account for this location, we'll just use that
