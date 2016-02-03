@@ -1,5 +1,15 @@
 -- CREATE scripts for tables
 
+CREATE TABLE `yaks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message` longtext,
+  `message_id` varchar(64) DEFAULT NULL,
+  `time` timestamp NULL DEFAULT NULL,
+  `score` int(11) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `message` longtext,
@@ -28,12 +38,3 @@ CREATE TABLE `yakker_ids` (
   CONSTRAINT `yakker_ids_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `yaks` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` longtext,
-  `message_id` varchar(64) DEFAULT NULL,
-  `time` timestamp NULL DEFAULT NULL,
-  `score` int(11) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
